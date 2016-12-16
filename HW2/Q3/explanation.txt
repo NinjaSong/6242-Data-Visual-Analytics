@@ -1,0 +1,7 @@
+Q3.i.2:
+	Plot 2(the Petal length & width) are better to separate the class.
+	Because each cluster is more crowded and less overlapping.
+     
+Q3.iii:
+	We use log scales when we have percent change or multiplicative factors to show;  
+	or when we have data with a large range of values.

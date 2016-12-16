@@ -1,0 +1,30 @@
+A.
+1. weka.classifiers.trees.RandomTree 
+Time taken to build model: 5.38 seconds
+Accuracy: 87.65 %
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 3009   135 |    a = 0
+  361   495 |    b = 1
+
+
+2. weka.classifiers.bayes.NaiveBayes 
+Time taken to build model: 0.04 seconds
+Accuracy: 80.8 %
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 2747  397 |    a = 0
+  371  485 |    b = 1
+
+----------------------------------------
+
+B.
+1. The result of Weka is 87.65% compared to my result 83.55% and the reason for this difference is because of the failure of using entropy to find the best attributes and the most reasonable split to create the tree in Task 1.I think weka performs a different pruning method. Also, choosing more attributes and data to train the tree might also improve the testing accuracy.
+
+2.I choose NaiveBayes to classify the data. The naive Bayes classifier is a family of simple probabilistic classifiers based on applying Bayes' theorem with strong independence assumptions between the features.
+The random forest achieves the best accuracy, which also consumes reasonable time to process (compared to Bayes)and has the highest accuracy. From this we can tell that random forest is the most accurate learning algorithm.For many dataset, it gives the best estimation. 
+On the other hand, Bayes method is not a random method, it bases on the probability. Although it needs more time to implement, the accuracy is still not as good as random forest because that so many variables may interfere each other which means the dataset may not satisfy the independence assumption.The naive Bayes predict with the least accuracy however has the shortest processing time. 

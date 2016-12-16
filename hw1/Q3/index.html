@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3 Bar chart with random colors</title>
+		<script type="text/javascript" src="d3/d3.v3.min.js"></script>
+		<style type="text/css">
+		
+			div.bar {
+				display: inline-block;
+				width: 30px;
+				height: 75px;	/* Gets overriden by D3-assigned height below */
+				margin-right: 2px;
+				border: solid;
+				background-color: teal;
+			}
+		
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			var dataset = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];  						 //
+			function rgb(){
+					var r=Math.floor(Math.random()*255);
+					var g=Math.floor(Math.random()*255);
+					var b=Math.floor(Math.random()*255);
+					var rgb='rgb('+r+','+g+','+b+')';
+					return rgb;
+					}
+			var c1 = rgb();
+			var c2 = rgb();
+			var c3 = rgb();
+			var c4 = rgb();
+			var c5 = rgb();
+			d3.select("body")
+    			.append("p")
+   				.text("Yunhe Song!");
+
+			d3.select("body").selectAll("div")
+				.data(dataset)
+				.enter()
+				.append("div")
+				.attr("class", "bar")
+				.style("height", function(d) {
+					var barHeight = d * 5;
+					return barHeight + "px";
+				});
+
+			d3.select("body").selectAll("div")
+					.style("background-color",function(d){if (d>=6 && d<11){
+							return c1;
+					}	if (d>=11 && d<16){
+							return c3;
+					}       if (d>=16 && d<21){
+							return c2;
+					}       if (d>=21 && d<26){
+							return c4;
+					}		if (d>=0 && d<6){
+							return c5;
+					}
+				});
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,3 @@
+<j>
+Using the LIKE operator gives you 100% precision with no concessions for recall. 
+A "fts" facility gives you a lot of flexibility to tune down the precision for better recall to improve the efficiency.

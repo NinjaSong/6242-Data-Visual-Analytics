@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        width: 960px;
+        height: 500px;
+        position: relative;
+    }
+
+    svg {
+        width: 100%;
+        height: 100%;
+        position: center;
+    }
+
+    .toolTip {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        position: absolute;
+        display:"inline-block";
+        width: 20;
+        height:25;
+        background: none repeat scroll 0 0 white;
+        border: 0 none;
+        border-radius: 8px 8px 8px 8px;
+        box-shadow: -3px 3px 15px #888888;
+        color: black;
+        font: 12px sans-serif;
+        padding: 5px;
+        text-align: center;
+    }
+
+    text {
+        font: 16px sans-serif;
+        color: white;
+    }
+    text.value {
+        font-size: 120%;
+        fill: white;
+    }
+
+    .axisHorizontal path{
+        fill: none;
+    }
+
+    .axisHorizontal .tick line {
+        stroke-width: 1;
+        stroke: rgba(0, 0, 0, 0.2);
+    }
+
+    .bar {
+        fill: grey;
+        fill-opacity: .9;
+    }
+
+</style>
+<body>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+    data = [
+    {product:'Product A',freq:{Q1:716, Q2:1287, Q3:249, Q4:324}}
+    ,{product:'Product B',freq:{Q1:2000, Q2:1876, Q3:3009, Q4:973}}
+    ,{product:'Product C',freq:{Q1:899, Q2:2333, Q3:418, Q4:213}}
+    ,{product:'Product D',freq:{Q1:989, Q2:1543, Q3:1862, Q4: 1111}}
+    ,{product:'Product E',freq:{Q1:4200, Q2:3220, Q3:948, Q4: 629}}
+    ,{product:'Product F',freq:{Q1:1321, Q2:156, Q3:212, Q4: 821}}
+    ,{product:'Product G',freq:{Q1:1977, Q2:247, Q3:1203, Q4: 562}}
+    ,{product:'Product H',freq:{Q1:2498, Q2:2852, Q3:942, Q4: 444}}
+    ];
+
+
+    var div = d3.select("body").append("div").attr("class", "toolTip");
+
+    var axisMargin = 20,
+            margin = 40,
+            valueMargin = 4,
+            width = parseInt(d3.select('body').style('width'), 10),
+            height = parseInt(d3.select('body').style('height'), 10),
+            barHeight = (height-axisMargin-margin*2)* 0.4/data.length,
+            barPadding = (height-axisMargin-margin*2)*0.6/data.length,
+            data, bar, svg, scale, xAxis, labelWidth = 0;
+
+    max = d3.max(data, function(d) { return d.freq.Q1+d.freq.Q2+d.freq.Q3+d.freq.Q4; });
+
+    svg = d3.select('body')
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+    svg.append("text")
+        .attr("x", (width/2))
+        .attr("y", 20 )
+        .attr("text-anchor", "middle")
+        .style("font-size", "24px")
+        .style("text-decoration", "underline")
+        .text("Company FooBar: Revenue for 2015");
+
+    bar = svg.selectAll("g")
+            .data(data)
+            .enter()
+            .append("g");
+
+    bar.attr("class", "bar")
+            .attr("cx",0)
+            .attr("transform", function(d, i) {
+                return "translate(" + margin + "," + (i * (barHeight + barPadding) + barPadding) + ")";
+            });
+
+    bar.append("text")
+            .attr("class", "label")
+            .attr("y", barHeight / 2)
+            .attr("dy", ".35em") //vertical align middle
+            .text(function(d){
+                return d.product;
+            }).each(function() {
+        labelWidth = Math.ceil(Math.max(labelWidth, this.getBBox().width));
+    });
+
+    scale = d3.scale.linear()
+            .domain([0, max])
+            .range([0, width - margin*2 - labelWidth]);
+
+    xAxis = d3.svg.axis()
+            .scale(scale)
+            .tickSize(-height + 2*margin + axisMargin)
+            .orient("bottom");
+
+    bar.append("rect")
+            .attr("transform", "translate("+labelWidth+", 0)")
+            .attr("height", barHeight)
+            .attr("width", function(d){
+                return scale(d.freq.Q1+d.freq.Q2+d.freq.Q3+d.freq.Q4);
+            });
+
+
+    bar.append("text")
+            .attr("class", "value")
+            .attr("y", barHeight / 2)
+            .attr("dx", -valueMargin + labelWidth) //margin right
+            .attr("dy", ".35em") //vertical align middle
+            .attr("text-anchor", "end")
+            .text(function(d){
+                return ("$"+(d.freq.Q1+d.freq.Q2+d.freq.Q3+d.freq.Q4));
+            })
+            .attr("x", function(d){
+                var width = this.getBBox().width;
+                return Math.max(width + valueMargin, scale(d.freq.Q1+d.freq.Q2+d.freq.Q3+d.freq.Q4));
+            });
+
+    bar
+            .on("mousemove", function(d){
+                d3.select(this)  
+                .style("fill","steelblue") ; 
+                div.style("left", 890+"px");
+                div.style("top", 300+"px");
+                div.style("display", "inline-block");
+                div.html((d.product)+"<br>"+
+                    "Q1"+"&nbsp;&nbsp;"+"$"+d.freq.Q1+"&nbsp;&nbsp;"+(100*(d.freq.Q1/(d.freq.Q1+d.freq.Q2+d.freq.Q3+d.freq.Q4))).toFixed(2)+"%"+"<br>"+
+                    "Q2"+"&nbsp;&nbsp;"+"$"+d.freq.Q2+"&nbsp;&nbsp;"+(100*(d.freq.Q2/(d.freq.Q1+d.freq.Q2+d.freq.Q3+d.freq.Q4))).toFixed(2)+"%"+"<br>"+
+                    "Q3"+"&nbsp;&nbsp;"+"$"+d.freq.Q3+"&nbsp;&nbsp;"+(100*(d.freq.Q3/(d.freq.Q1+d.freq.Q2+d.freq.Q3+d.freq.Q4))).toFixed(2)+"%"+"<br>"+
+                    "Q4"+"&nbsp;&nbsp;"+"$"+d.freq.Q4+"&nbsp;&nbsp;"+(100*(d.freq.Q4/(d.freq.Q1+d.freq.Q2+d.freq.Q3+d.freq.Q4))).toFixed(2)+"%"+"<br>"    );
+            });
+    bar
+            .on("mouseout", function(d){
+                d3.select(this)  
+                .style("fill","grey") ; 
+                div.style("display", "inline-block");
+                div.html("product"+"<br>"+
+                    "Q1"+"&nbsp;&nbsp;"+"$"+"&nbsp;&nbsp;"+"&nbsp;&nbsp;"+"&nbsp;&nbsp;"+"%"+"<br>"+
+                    "Q2"+"&nbsp;&nbsp;"+"$"+"&nbsp;&nbsp;"+"&nbsp;&nbsp;"+"&nbsp;&nbsp;"+"%"+"<br>"+
+                    "Q3"+"&nbsp;&nbsp;"+"$"+"&nbsp;&nbsp;"+"&nbsp;&nbsp;"+"&nbsp;&nbsp;"+"%"+"<br>"+
+                    "Q4"+"&nbsp;&nbsp;"+"$"+"&nbsp;&nbsp;"+"&nbsp;&nbsp;"+"&nbsp;&nbsp;"+"%"+"<br>"    );
+            });
+
+    svg.insert("g",":first-child")
+            .attr("class", "axisHorizontal")
+            .attr("transform", "translate(" + (margin + labelWidth) + ","+ (height - axisMargin - margin)+")")
+            .call(xAxis);
+
+</script>
+</body>

@@ -1,0 +1,12 @@
+
+
+Average node degree : 2.023
+The Average degree of a node is the number of relation (edge) it has, independently if it\'92s a in or a out relation. It\'92s the average of edges for one node.)
+
+Diameter of the graph : 4
+The maximal distance between all pairs of nodes :4)
+
+Average path length :3.65
+The average graph-distance between all pairs of nodes which measures derive from the distance: Betweenness Centrality )
+
+}

@@ -1,0 +1,9 @@
+Q1.a
+	In the year 2005, I choose the total population that every country accepted. 
+	So we can easily seperate the different population between countries.
+
+Q1.b
+	There are 4 attributes in the chart: age and sex(as shown in the left side), 
+	country of origin and also asylum seeking country.
+	
+	

@@ -1,0 +1,9 @@
+1. Implementation 
+
+1) Use just one tree. One by one justify features , split on average of the feature and compute the entropy difference to valid the efficiency until there is no more gain or features. 
+2) By using random.randint to generate random dataset and then use OOB to calculate the relative error.
+
+
+2. accuracy of OOB is 0.8355
+
+

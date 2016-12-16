@@ -1,0 +1,5 @@
+Q4.iii:
+	Pattern: In a day, around 8-10am, 16-18pm, glucose is more than other times.
+		 In the week, in weekend glucose is more than other times.
+	Reason: Daytime glucose is more because of eating(lunch and dinner);
+		Weekday glucose is more because of weekend!(more free time!)

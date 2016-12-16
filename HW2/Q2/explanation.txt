@@ -1,0 +1,5 @@
+Q2.c
+	scale the radii by the square root of the degree(actually it's root of edges + constant)
+	Just linear the radii will be too large.
+	
+	

@@ -1,0 +1,15 @@
+<i>
+key collision : 68 clusters found & quickly cluster
+nearest neighbour : 183 clusters found & slowly cluster
+choose: key collision
+1, more concise (in nearest neighbor, it regards 11th,13th,15th,etc, as the same thing)
+2, more quickly
+
+<iii>
+Column of "Status" are using nominal data.  
+Column of "ID" are using ordinal data scale.
+
+<v>
+Adding data is to construct a new column by calling a web service, 
+passing it data from existing columns by fetching URLs. 
+This can help us do the on-site searching without too much work.

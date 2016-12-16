@@ -1,0 +1,61 @@
+
+.open rt.db
+create table movies(movie_id integer, name text, genre text); 
+create table ratings(user_id integer, movie_id integer, rating real,timestamp integer);
+.separator "%" "\n"
+.import movies.txt movies
+
+.separator "%" "\n"
+.import ratings.txt ratings
+select '';
+
+
+
+create index movie_primary_index on movies (movie_id);
+create index movie_secondary_index on ratings(movie_id);
+select '';
+
+
+
+select count(movie_id) from (select movie_id,avgrate,numofview from (select movie_id,avg(rating) as "avgrate",count(movie_id) as "numofview" from ratings group by movie_id) where avgrate >=3.5 and numofview >= 500);
+select '';
+
+.separator ','
+select id, name, review_count from (select name,id,count(id) as "review_count" from (SELECT movies.name as 'name', movies.movie_id, ratings.movie_id as 'id' FROM movies inner JOIN ratings ON movies.movie_id=ratings.movie_id) group by id order by name) where review_count >2500 order by review_count asc;
+select '';
+
+
+.separator ','
+select id, name, avg_rating from (select name,id,avg(rate) as "avg_rating" from (SELECT movies.name as'name', movies.movie_id, ratings.movie_id as 'id',ratings.rating as 'rate' FROM movies inner JOIN ratings ON movies.movie_id=ratings.movie_id) group by id order by name) order by avg_rating desc limit 10;
+select ''; 
+
+
+
+.separator ','
+select name, avg_rating,review_count,genre from(select name,id,avg(rate) as"avg_rating", count(id) as"review_count", genre from (SELECT movies.name as'name', movies.movie_id,movies.genre as "genre", ratings.movie_id as 'id', ratings.rating as 'rate' FROM movies inner JOIN ratings ON movies.movie_id=ratings.movie_id) group by id order by genre and name) where review_count > 1000 order by avg_rating desc limit 8;
+select '';
+
+
+
+
+create table table_1 as select * from movies inner join ratings using(movie_id);
+create table count10 as select count(movie_id), movie_id,name from table_1 group by  movie_id having count(movie_id) = 10;
+create table reviews as SELECT count10.movie_id, count10.name, table_1.user_id as 'userid', table_1.user_id  as 'userid2' FROM count10,table_1 using (movie_id);
+create table reviews2 as SELECT count10.movie_id, count10.name, table_1.user_id as 'userid1', table_1.user_id  as 'userid2' FROM count10,table_1 using (movie_id);
+create table pair as select reviews.userid,reviews2.userid1,reviews.name as 'name' from reviews,reviews2 on reviews.movie_id=reviews2.movie_id where reviews.userid!=reviews2.userid2 and reviews.userid < reviews2.userid2  order by name;
+create view common_interests as select userid, userid1,name from pair;
+select '';
+
+
+select count(userid) as 'common_interest_count' from [pair];
+select '';
+
+
+
+create virtual table MOVIE_OVERVIEW using fts3 (id integer, name text, year integer, overview text, popularity decimal);
+.separator ","
+.import movie-overview.txt MOVIE_OVERVIEW
+select count(*) from MOVIE_OVERVIEW where MOVIE_OVERVIEW match "death OR life";
+select id from MOVIE_OVERVIEW where MOVIE_OVERVIEW match 'life NEAR/6 about';
+select '';
+

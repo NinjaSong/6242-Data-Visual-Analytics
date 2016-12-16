@@ -1,0 +1,6 @@
+line 16: split and map each line into source, target, weight
+line 17: filter out the line with weight equals one
+line 18,19: map the source and target nodes with consideration of incoming/outgoing weight by times 1.0 or -1.0
+line 20: merge weighted source with target
+line 21: reduce by adding the weight of same nodes
+line 22: output answer <node	weight_sum>
